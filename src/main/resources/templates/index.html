@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Openweather</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../config.js"></script>
+</head>
+<body>
+<h1>Weather forecast from openweather</h1>
+<input id = "zip">
+<table>
+    <tr>
+        <td class = "data" id = "by"></td>
+    </tr>
+    <tr>
+        <td class = "data" id = "vejr"></td>
+    </tr>
+    <tr>
+        <td class = "data" id = "temp"></td>
+    </tr>
+    <tr>
+        <td class = "data" id = "vind"></td>
+    </tr>
+    <tr>
+        <td class = "data" id = "retn"></td>
+    </tr>
+</table>
+<button>Update Weather Forecast</button>
+<script>
+    $(document).ready(function (){
+        $("button").click(function (){
+            $.ajax({
+                type: "GET",
+                dataType: "jsonp",
+                url: "https://api.openweathermap.org/data/2.5/weather?zip=" + $("#zip").val() + ",dk&units=metric&APPID=" + apiKey.key,
+                success: function(responseTxt, statusTxt, xhr) {
+                    if (statusTxt == "success") {
+                        $("#by").html("By: " + responseTxt.name);
+                        $("#vejr").html("Vejr: " + responseTxt.weather[0].description);
+                        $("#temp").html("Temp: " + responseTxt.main.temp);
+                        $("#vind").html("Vind: " + responseTxt.wind.speed);
+                        $("#retn").html("Retning: " + responseTxt.wind.deg);
+                    }
+                    if (statusTxt == "error")
+                        alert("Error: " + xhr.status + ": " + xhr.statusText);
+                }
+            })
+        })
+    })
+
+    /*let url = "https://api.openweathermap.org/data/2.5/weather?zip=" + $("#input").val() + ",dk&units=metric&APPID=52487e5e6b58453f8dbb2d5df4502575" */
+    /*$(document).ready(function(){
+        $("button").click(function(){
+            $.ajax({
+                type: "GET",
+                dataType: "jsonp",
+                url: "https://api.openweathermap.org/data/2.5/weather?zip=2000,dk&units=metric&APPID=52487e5e6b58453f8dbb2d5df4502575",
+                success: function(responseTxt, statusTxt, xhr) {
+                    if (statusTxt == "success") {
+                        //alert("External content loaded successfully!");
+
+                        alert(responseTxt.name + ":" + responseTxt.weather[0].description + " " + responseTxt.main.temp);
+
+
+                    }
+                    if (statusTxt == "error")
+                        alert("Error: " + xhr.status + ": " + xhr.statusText);
+                }
+            });
+        });
+    });*/
+
+</script>
+</body>
+</html>
