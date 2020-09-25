@@ -45,7 +45,7 @@
                 $.ajax({
                     type: "GET",
                     dataType: "jsonp",
-                    url: "https://api.openweathermap.org/data/2.5/weather?zip=" + $("#zip").val() + ",dk&units=metric&APPID=db61a5ab6f47a0aa1212a4675171a52d\n&lang=da",
+                    url: "https://api.openweathermap.org/data/2.5/weather?zip=" + $("#zip").val() + ",dk&units=metric&APPID=" + config.key + "&lang=da",
                     success: function(responseTxt, statusTxt, xhr) {
                         $("#datatab").show()
                         if (statusTxt == "success") {
