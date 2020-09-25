@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Openweather</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../config.js"></script>
+    <link rel = "stylesheet" href="style.css">
+</head>
+<body>
+<div id = "main">
+    <div>
+        <h1>Current weather</h1>
+        <p>Type your zipcode:</p>
+        <input id = "zip">
+        <button>Update Weather Forecast</button>
+    </div>
+    <div>
+        <table id = "datatab">
+            <tr>
+                <td class = "name" id = "nby">By: </td>
+                <td class = "data" id = "by"></td>
+            </tr>
+            <tr>
+                <td class = "name" id = "nvejr">Vejr: </td>
+                <td class = "data" id = "vejr"></td>
+            </tr>
+            <tr>
+                <td class = "name" id = "ntemp">Temp: </td>
+                <td class = "data" id = "temp"></td>
+            </tr>
+            <tr>
+                <td class = "name" id = "nvind">Vind: </td>
+                <td class = "data" id = "vind"></td>
+            </tr>
+            <tr>
+                <td class = "name" id = "nretn">Retning: </td>
+                <td class = "data" id = "retn"></td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function (){
+            $("button").click(function (){
+                $.ajax({
+                    type: "GET",
+                    dataType: "jsonp",
+                    url: "https://api.openweathermap.org/data/2.5/weather?zip=" + $("#zip").val() + ",dk&units=metric&APPID=db61a5ab6f47a0aa1212a4675171a52d\n&lang=da",
+                    success: function(responseTxt, statusTxt, xhr) {
+                        $("#datatab").show()
+                        if (statusTxt == "success") {
+                            $("#by").html(responseTxt.name),
+                                $("#vejr").html(responseTxt.weather[0].description),
+                                $("#temp").html(responseTxt.main.temp),
+                                $("#vind").html(responseTxt.wind.speed)
+                            if(responseTxt.wind.deg > 270){
+                                $("#retn").html("NV")
+                            }
+                            else if (responseTxt.wind.deg === 270){
+                                $("#retn").html("V")
+                            }
+                            else if (responseTxt.wind.deg < 270 && responseTxt.wind.deg > 180){
+                                $("#retn").html("SV")
+                            }
+                            else if (responseTxt.wind.deg === 180){
+                                $("#retn").html("S")
+                            }
+                            else if (responseTxt.wind.deg < 180 && responseTxt.wind.deg > 90){
+                                $("#retn").html("SØ")
+                            }
+                            else if (responseTxt.wind.deg === 90){
+                                $("#retn").html("Ø")
+                            }
+                            else if (responseTxt.wind.deg < 90 && responseTxt.wind.deg > 0){
+                                $("#retn").html("NØ")
+                            }
+                            else if (responseTxt.wind.deg === 0 || responseTxt.wind.deg === 360){
+                                $("#retn").html("N")
+                            }
+                        }
+                        if (statusTxt == "error")
+                            alert("Error: " + xhr.status + ": " + xhr.statusText)
+                    }
+                })
+            })
+        })
+    </script>
+</div>
+</body>
+</html>
